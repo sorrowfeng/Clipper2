@@ -9,6 +9,8 @@
 
 #include "clipper2/clipper.h"
 #include "clipper2/clipper.offset.h"
+#include <iterator>
+#include <algorithm>
 
 namespace Clipper2Lib {
 
@@ -33,9 +35,9 @@ const double arc_const = 0.002; // <-- 1/500
 // Miscellaneous methods
 //------------------------------------------------------------------------------
 
-std::optional<size_t> GetLowestClosedPathIdx(const Paths64& paths)
+Optional<size_t> GetLowestClosedPathIdx(const Paths64& paths)
 {
-    std::optional<size_t> result;
+	Optional<size_t> result;
 	Point64 botPt = Point64(INT64_MAX, INT64_MIN);
 	for (size_t i = 0; i < paths.size(); ++i)
 	{
@@ -149,7 +151,7 @@ ClipperOffset::Group::Group(const Paths64& _paths, JoinType _join_type, EndType 
 	}
 	else
 	{
-    lowest_path_idx = std::nullopt;
+		lowest_path_idx.reset();
 		is_reversed = false;
 	}
 }
@@ -576,7 +578,7 @@ void ClipperOffset::ExecuteInternal(double delta)
 		for (const Group& group : groups_) sol_size += group.paths_in.size();
 		solution->reserve(sol_size);
 		for (const Group& group : groups_)
-			copy(group.paths_in.begin(), group.paths_in.end(), back_inserter(*solution));
+			copy(group.paths_in.begin(), group.paths_in.end(), std::back_inserter(*solution));
 	}
 	else
 	{

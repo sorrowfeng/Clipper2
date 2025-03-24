@@ -12,7 +12,10 @@
 
 #include "clipper.core.h"
 #include "clipper.engine.h"
-#include <optional>
+//#include <optional>
+#include <cstddef> // for size_t
+#include <stdexcept> // for std::logic_error
+#include <iostream>
 
 namespace Clipper2Lib {
 
@@ -29,13 +32,41 @@ enum class EndType {Polygon, Joined, Butt, Square, Round};
 
 typedef std::function<double(const Path64& path, const PathD& path_normals, size_t curr_idx, size_t prev_idx)> DeltaCallback64;
 
+
+template <typename T>
+class Optional 
+{
+private:
+    bool has_value_;
+    T value_; 
+public:
+    Optional() : has_value_(false), value_() {}
+    Optional(const T& value) : has_value_(true), value_(value) {}
+    bool has_value() const { return has_value_; }
+    T value() const 
+	{
+        if (!has_value_) 
+		{
+            throw std::logic_error("No value present");
+        }
+        return value_;
+    }
+    void set_value(const T& value) 
+	{
+        has_value_ = true;
+        value_ = value;
+    }
+    void reset() { has_value_ = false; }
+};
+
+
 class ClipperOffset {
 private:
 
 	class Group {
 	public:
 		Paths64 paths_in;
-        std::optional<size_t> lowest_path_idx{};
+		Optional<size_t> lowest_path_idx{};
 		bool is_reversed = false;
 		JoinType join_type;
 		EndType end_type;

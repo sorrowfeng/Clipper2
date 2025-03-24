@@ -16,6 +16,7 @@
 #include "clipper2/clipper.minkowski.h"
 #include "clipper2/clipper.rectclip.h"
 #include <type_traits>
+#include <iterator>
 
 namespace Clipper2Lib {
 
@@ -163,7 +164,7 @@ namespace Clipper2Lib {
   {
     Path<T> result;
     result.reserve(path.size());
-    std::transform(path.begin(), path.end(), back_inserter(result),
+    std::transform(path.begin(), path.end(), std::back_inserter(result),
       [dx, dy](const auto& pt) { return Point<T>(pt.x + dx, pt.y +dy); });
     return result;
   }
@@ -480,7 +481,7 @@ namespace Clipper2Lib {
       "MakePathZD requires values in multiples of 3");
     std::size_t size = N / 3;
     PathD result(size);
-    if constexpr (std::numeric_limits<T2>::is_integer)
+    if (std::numeric_limits<T2>::is_integer)
       for (size_t i = 0; i < size; ++i)
         result[i] = PointD(list[i * 3],
           list[i * 3 + 1], list[i * 3 + 2]);

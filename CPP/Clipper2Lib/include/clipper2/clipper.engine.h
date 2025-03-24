@@ -14,6 +14,7 @@
 #include <queue>
 #include <functional>
 #include <memory>
+#include <vector>
 
 namespace Clipper2Lib {
 
@@ -25,6 +26,12 @@ namespace Clipper2Lib {
 	struct OutRec;
 	struct HorzSegment;
 
+	template<typename T, typename... Args>
+	std::unique_ptr<T> make_unique_cxx11(Args&&... args) 
+	{
+		return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+	}
+
 	//Note: all clipping operations except for Difference are commutative.
 	enum class ClipType { NoClip, Intersection, Union, Difference, Xor };
 
@@ -35,14 +42,14 @@ namespace Clipper2Lib {
 		Empty = 0, OpenStart = 1, OpenEnd = 2, LocalMax = 4, LocalMin = 8
 	};
 
-	constexpr enum VertexFlags operator &(enum VertexFlags a, enum VertexFlags b)
+	constexpr VertexFlags operator &(VertexFlags a, VertexFlags b) 
 	{
-		return (enum VertexFlags)(uint32_t(a) & uint32_t(b));
+		return static_cast<VertexFlags>(static_cast<uint32_t>(a) & static_cast<uint32_t>(b));
 	}
 
-	constexpr enum VertexFlags operator |(enum VertexFlags a, enum VertexFlags b)
+	constexpr VertexFlags operator |(VertexFlags a, VertexFlags b) 
 	{
-		return (enum VertexFlags)(uint32_t(a) | uint32_t(b));
+		return static_cast<VertexFlags>(static_cast<uint32_t>(a) | static_cast<uint32_t>(b));
 	}
 
 	struct Vertex {
@@ -328,8 +335,8 @@ namespace Clipper2Lib {
 		}
 	};
 
-	typedef typename std::vector<std::unique_ptr<PolyPath64>> PolyPath64List;
-	typedef typename std::vector<std::unique_ptr<PolyPathD>>  PolyPathDList;
+	typedef std::vector<std::unique_ptr<PolyPath64>> PolyPath64List;
+	typedef std::vector<std::unique_ptr<PolyPathD>>  PolyPathDList;
 
 	class PolyPath64 : public PolyPath {
 	private:
@@ -358,7 +365,8 @@ namespace Clipper2Lib {
 
 		PolyPath64* AddChild(const Path64& path) override
 		{
-			return childs_.emplace_back(std::make_unique<PolyPath64>(this, path)).get();
+			childs_.emplace_back(make_unique_cxx11<PolyPath64>(this, path));
+			return childs_.back().get();
 		}
 
 		void Clear() override
@@ -428,12 +436,14 @@ namespace Clipper2Lib {
 
 		PolyPathD* AddChild(const Path64& path) override
 		{
-			return childs_.emplace_back(std::make_unique<PolyPathD>(this, path)).get();
+			childs_.emplace_back(make_unique_cxx11<PolyPathD>(this, path));
+			return childs_.back().get();
 		}
 
 		PolyPathD* AddChild(const PathD& path)
 		{
-			return childs_.emplace_back(std::make_unique<PolyPathD>(this, path)).get();
+			childs_.emplace_back(make_unique_cxx11<PolyPathD>(this, path));
+			return childs_.back().get();
 		}
 
 		void Clear() override
