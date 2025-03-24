@@ -1,4 +1,21 @@
 # Clipper2
+
+### Modified content
+
+Modification of features not available in C++11, such as std:: make_uunique std:: optional
+
+### Test compilation environment
+
+* Windows 10
+* Visual Studio 2015
+* cmake 3.29.2
+* Win32
+* C++11
+
+> Navigate to C/C++->General, find Treat Warnings As Errors, and set it to No (/WX -).
+> ![250324141554330.png](https://fastly.jsdelivr.net/gh/sorrowfeng/ImageHub@main/2025-03/250324141554330_1742796954431.png)
+
+
 ### A Polygon <a href="https://en.wikipedia.org/wiki/Clipping_(computer_graphics)">Clipping</a> and <a href="https://en.wikipedia.org/wiki/Parallel_curve">Offsetting</a> library (in C++, C# &amp; Delphi)<br>
 [![GitHub Actions C++ status](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_cpp.yml/badge.svg)](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_cpp.yml)&nbsp;[![C#](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_csharp.yml/badge.svg)](https://github.com/AngusJohnson/Clipper2/actions/workflows/actions_csharp.yml)&nbsp;[![License](https://img.shields.io/badge/License-Boost_1.0-lightblue.svg)](https://www.boost.org/LICENSE_1_0.txt)
 [![Nuget](https://img.shields.io/nuget/v/Clipper2?color=green)](https://www.nuget.org/packages/Clipper2)
