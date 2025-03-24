@@ -2,7 +2,7 @@
 
 ### Modified content
 
-Modification of features not available in C++11, such as std:: make_uunique std:: optional
+Modification of features not available in C++11, such as std::make_unique std::optional
 
 ### Test compilation environment
 
